@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using RoomHub.Api.Common;
 using RoomHub.Api.Domain.Common;
@@ -40,18 +39,6 @@ builder.Services.AddScoped<ICommandHandler<CreateBookingCommand, Result<BookingC
 builder.Services.AddScoped<IQueryHandler<GetBookingQuery, Result<BookingDetailsResponse>>, GetBookingHandler>();
 builder.Services.AddScoped<ICommandHandler<CancelBookingCommand>, CancelBookingHandler>();
 
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-    options.ApiVersionReader = ApiVersionReader.Combine(
-        new UrlSegmentApiVersionReader(),
-        new QueryStringApiVersionReader("api-version"),
-        new HeaderApiVersionReader("x-api-version")
-    );
-});
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -61,26 +48,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGet("/", () => "RoomHub API is running.");
-
-var apiVersionSet = app.NewApiVersionSet()
-    .HasApiVersion(new ApiVersion(1, 0))
-    .ReportApiVersions()
-    .Build();
-
-app.MapRoomEndpoints("/api/rooms")
-    .WithApiVersionSet(apiVersionSet)
-    .HasApiVersion(new ApiVersion(1, 0));
-
-app.MapBookingEndpoints("/api/bookings")
-    .WithApiVersionSet(apiVersionSet)
-    .HasApiVersion(new ApiVersion(1, 0));
-
-app.MapRoomEndpoints("/api/v{version:apiVersion}/rooms")
-    .WithApiVersionSet(apiVersionSet)
-    .HasApiVersion(new ApiVersion(1, 0));
-
-app.MapBookingEndpoints("/api/v{version:apiVersion}/bookings")
-    .WithApiVersionSet(apiVersionSet)
-    .HasApiVersion(new ApiVersion(1, 0));
+app.MapRoomEndpoints();
+app.MapBookingEndpoints();
 
 app.Run();

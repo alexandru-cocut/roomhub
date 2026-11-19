@@ -6,13 +6,11 @@ namespace RoomHub.Api.Features.Rooms;
 
 public static class RoomEndpointExtensions
 {
-    public static RouteGroupBuilder MapRoomEndpoints(this IEndpointRouteBuilder app, string prefix = "/api/rooms")
+    public static void MapRoomEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup(prefix).WithTags("Rooms");
+        var group = app.MapGroup("/api/rooms").WithTags("Rooms");
         group.MapCreateRoomEndpoint();
         group.MapGetRoomEndpoint();
         group.MapCreateBookingEndpoint();
-        return group;
     }
 }
-
