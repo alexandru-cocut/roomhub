@@ -12,24 +12,24 @@ R8: The booking cancelling lived in the service which now doesn't exist. It live
 ## 2. Result instead of an exception
 Why is `Result` a better choice than an exception for "the room is occupied"? What happens in your code when an `Error` is returned?
 
-_(your answer here)_
+Because exceptions cost performance and with a Result you are forced to handle the errors.
 
 ## 3. Who knows about EF Core?
 Which classes in your project know about EF Core and which do not? What do you gain and what do you pay with Repository + Unit of Work?
 
-_(your answer here)_
+RoomHubDbContext, RoomRepository, and BookingRepository
 
 ## 4. The flow of a request
 Draw in text (ASCII arrows) the path of a `POST /api/rooms/{roomId}/bookings` request through your project, with the **real** names of files and classes, from the endpoint to the database.
 
-_(your answer here)_
+HTTP Request -> CreateBookingEndpoint -> CreateBookingHandler -> RoomRepository.GetByIdAsync -> Booking.Create -> BookingRepository.CountActiveForParticipantOnDateAsync -> BookingRepository.ListForRoomAsync -> Booking.OverlapsWith -> BookingRepository.AddAsync -> RoomHubDbContext.SaveChangesAsync -> SQLite Database
 
 ## 5. What you rejected from what the AI gave you
 Give a concrete example of code or an idea proposed by the AI that you corrected or rejected, and say why.
 
-_(your answer here)_
+The AI added API versioning with Asp.Versioning.Http, which I rejected and removed because the assignment contract required exact unversioned endpoints like /api/rooms to match automated tests.
 
 ## 6. If you had 30 more minutes
 What would you improve and what risk did you leave in the project?
 
-_(your answer here)_
+I would add unit tests / start a frontend / implement auth
