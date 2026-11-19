@@ -25,3 +25,4 @@ public class GetBookingHandler(IBookingRepository bookingRepository)
             booking.Status.ToString()));
     }
 }
+

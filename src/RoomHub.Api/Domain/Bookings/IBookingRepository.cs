@@ -6,3 +6,4 @@ public interface IBookingRepository
     Task<IReadOnlyList<Booking>> ListForRoomAsync(Guid roomId, CancellationToken cancellationToken = default);
     Task AddAsync(Booking booking, CancellationToken cancellationToken = default);
 }
+

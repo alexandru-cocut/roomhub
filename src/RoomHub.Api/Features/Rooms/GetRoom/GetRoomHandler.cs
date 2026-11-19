@@ -18,3 +18,4 @@ public class GetRoomHandler(IRoomRepository roomRepository)
         return Result.Success(new GetRoomResponse(room.Id, room.Name, room.Capacity));
     }
 }
+

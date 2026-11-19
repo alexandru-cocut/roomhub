@@ -15,3 +15,4 @@ public class RoomRepository(RoomHubDbContext dbContext) : IRoomRepository
         await dbContext.Rooms.AddAsync(room, cancellationToken);
     }
 }
+

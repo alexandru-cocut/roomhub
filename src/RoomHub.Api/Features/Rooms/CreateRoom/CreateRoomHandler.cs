@@ -22,3 +22,4 @@ public class CreateRoomHandler(IRoomRepository roomRepository, IUnitOfWork unitO
         return Result.Success(new RoomResponse(room.Id, room.Name, room.Capacity));
     }
 }
+

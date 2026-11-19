@@ -28,3 +28,4 @@ public class Room
         return Result.Success(new Room(Guid.NewGuid(), name.Trim(), capacity));
     }
 }
+

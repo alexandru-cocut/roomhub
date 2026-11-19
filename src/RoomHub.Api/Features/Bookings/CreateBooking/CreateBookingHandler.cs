@@ -50,3 +50,4 @@ public class CreateBookingHandler(
         return Result.Success(new BookingCreatedResponse(booking.Id, booking.RoomId, booking.Status.ToString()));
     }
 }
+

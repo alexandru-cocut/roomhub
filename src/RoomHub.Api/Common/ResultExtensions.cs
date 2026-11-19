@@ -12,3 +12,4 @@ public static class ResultExtensions
             title: error.Code);
     }
 }
+

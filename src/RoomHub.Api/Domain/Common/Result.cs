@@ -48,3 +48,4 @@ public class Result<TValue> : Result
     public static implicit operator Result<TValue>(TValue value) => Success(value);
     public static implicit operator Result<TValue>(Error error) => Failure(error);
 }
+

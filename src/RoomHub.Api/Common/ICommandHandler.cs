@@ -9,3 +9,4 @@ public interface ICommandHandler<in TCommand>
 {
     Task<Domain.Common.Result> HandleAsync(TCommand command, CancellationToken cancellationToken = default);
 }
+

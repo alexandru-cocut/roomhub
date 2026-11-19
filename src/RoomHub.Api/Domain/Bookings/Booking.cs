@@ -87,3 +87,4 @@ public class Booking
         return StartUtc < end && start < EndUtc;
     }
 }
+

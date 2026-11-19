@@ -13,3 +13,4 @@ public static class BookingEndpointExtensions
         return group;
     }
 }
+

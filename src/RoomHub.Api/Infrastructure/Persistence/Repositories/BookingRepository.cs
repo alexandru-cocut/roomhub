@@ -24,3 +24,4 @@ public class BookingRepository(RoomHubDbContext dbContext) : IBookingRepository
         await dbContext.Bookings.AddAsync(booking, cancellationToken);
     }
 }
+

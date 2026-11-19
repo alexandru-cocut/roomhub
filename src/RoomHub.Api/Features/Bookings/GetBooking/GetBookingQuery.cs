@@ -10,3 +10,4 @@ public record BookingDetailsResponse(
     DateTime EndUtc,
     int Attendees,
     string Status);
+

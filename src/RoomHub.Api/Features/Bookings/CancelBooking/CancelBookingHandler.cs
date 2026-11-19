@@ -27,3 +27,4 @@ public class CancelBookingHandler(
         return Result.Success();
     }
 }
+
