@@ -27,8 +27,8 @@ public class Booking
         Id = id;
         RoomId = roomId;
         BookedBy = bookedBy;
-        StartUtc = startUtc;
-        EndUtc = endUtc;
+        StartUtc = DateTime.SpecifyKind(startUtc, DateTimeKind.Utc);
+        EndUtc = DateTime.SpecifyKind(endUtc, DateTimeKind.Utc);
         Attendees = attendees;
         Status = status;
     }
@@ -43,6 +43,9 @@ public class Booking
     {
         if (string.IsNullOrWhiteSpace(bookedBy))
             return Result.Failure<Booking>(Error.Validation("InvalidBookedBy", "BookedBy is required."));
+
+        startUtc = DateTime.SpecifyKind(startUtc.ToUniversalTime(), DateTimeKind.Utc);
+        endUtc = DateTime.SpecifyKind(endUtc.ToUniversalTime(), DateTimeKind.Utc);
 
         if (endUtc <= startUtc)
             return Result.Failure<Booking>(Error.Validation("InvalidRange", "The end must be after the start."));

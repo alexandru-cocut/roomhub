@@ -24,9 +24,10 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddSingleton(TimeProvider.System);
 
+var dbPath = Path.Combine(builder.Environment.ContentRootPath, "roomhub.db");
 builder.Services.AddDbContext<RoomHubDbContext>(options =>
 {
-    options.UseSqlite("Data Source=roomhub.db");
+    options.UseSqlite($"Data Source={dbPath}");
 });
 
 builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<RoomHubDbContext>());

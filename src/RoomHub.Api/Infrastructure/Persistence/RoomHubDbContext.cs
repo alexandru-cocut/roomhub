@@ -27,8 +27,16 @@ public class RoomHubDbContext(DbContextOptions<RoomHubDbContext> options)
             builder.HasKey(b => b.Id);
             builder.Property(b => b.RoomId).IsRequired();
             builder.Property(b => b.BookedBy).IsRequired();
-            builder.Property(b => b.StartUtc).IsRequired();
-            builder.Property(b => b.EndUtc).IsRequired();
+            builder.Property(b => b.StartUtc)
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc))
+                .IsRequired();
+            builder.Property(b => b.EndUtc)
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc))
+                .IsRequired();
             builder.Property(b => b.Attendees).IsRequired();
             builder.Property(b => b.Status)
                 .HasConversion<string>()
@@ -36,4 +44,3 @@ public class RoomHubDbContext(DbContextOptions<RoomHubDbContext> options)
         });
     }
 }
-
