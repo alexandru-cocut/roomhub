@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RoomHub.Api/RoomHub.Api.csproj" />
+  </Folder>
+</Solution>
