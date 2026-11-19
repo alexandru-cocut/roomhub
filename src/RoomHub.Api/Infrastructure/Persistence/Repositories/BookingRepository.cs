@@ -19,9 +19,22 @@ public class BookingRepository(RoomHubDbContext dbContext) : IBookingRepository
         return bookings;
     }
 
+    public async Task<int> CountActiveForParticipantOnDateAsync(string bookedBy, DateTime dateUtc, CancellationToken cancellationToken = default)
+    {
+        var dayStart = dateUtc.Date;
+        var dayEnd = dayStart.AddDays(1);
+
+        return await dbContext.Bookings
+            .CountAsync(b =>
+                b.BookedBy == bookedBy &&
+                b.Status == BookingStatus.Active &&
+                b.StartUtc >= dayStart &&
+                b.StartUtc < dayEnd,
+                cancellationToken);
+    }
+
     public async Task AddAsync(Booking booking, CancellationToken cancellationToken = default)
     {
         await dbContext.Bookings.AddAsync(booking, cancellationToken);
     }
 }
-

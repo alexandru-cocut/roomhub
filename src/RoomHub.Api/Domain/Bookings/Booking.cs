@@ -57,8 +57,15 @@ public class Booking
         if (startUtc < now)
             return Result.Failure<Booking>(Error.Validation("InvalidStart", "Booking cannot start in the past."));
 
-        if ((endUtc - startUtc) > TimeSpan.FromHours(4))
-            return Result.Failure<Booking>(Error.Validation("DurationExceeded", "Booking duration cannot exceed 4 hours."));
+        // R6 & R10: Rooms with capacity > 10 can be booked for at most 2 hours; <= 10 at most 4 hours.
+        var maxDuration = room.Capacity > 10 ? TimeSpan.FromHours(2) : TimeSpan.FromHours(4);
+        if ((endUtc - startUtc) > maxDuration)
+        {
+            var msg = room.Capacity > 10
+                ? "Rooms with a capacity greater than 10 can be booked for at most 2 hours."
+                : "Booking duration cannot exceed 4 hours.";
+            return Result.Failure<Booking>(Error.Validation("DurationExceeded", msg));
+        }
 
         return Result.Success(new Booking(
             Guid.NewGuid(),
@@ -70,10 +77,15 @@ public class Booking
             BookingStatus.Active));
     }
 
-    public Result Cancel()
+    public Result Cancel(TimeProvider timeProvider)
     {
         if (Status == BookingStatus.Cancelled)
             return Result.Failure(Error.Conflict("AlreadyCancelled", "The booking is already cancelled."));
+
+        // R11: A booking can be cancelled only if it starts at least 60 minutes from now.
+        var now = timeProvider.GetUtcNow().UtcDateTime;
+        if (StartUtc < now.AddMinutes(60))
+            return Result.Failure(Error.Conflict("CancellationWindowClosed", "A booking can only be cancelled at least 60 minutes before its start time."));
 
         Status = BookingStatus.Cancelled;
         return Result.Success();
@@ -87,4 +99,3 @@ public class Booking
         return StartUtc < end && start < EndUtc;
     }
 }
-

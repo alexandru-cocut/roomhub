@@ -6,7 +6,8 @@ namespace RoomHub.Api.Features.Bookings.CancelBooking;
 
 public class CancelBookingHandler(
     IBookingRepository bookingRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    TimeProvider timeProvider)
     : ICommandHandler<CancelBookingCommand>
 {
     public async Task<Result> HandleAsync(CancelBookingCommand command, CancellationToken cancellationToken = default)
@@ -17,7 +18,8 @@ public class CancelBookingHandler(
             return Result.Failure(Error.NotFound("BookingNotFound", "The booking does not exist."));
         }
 
-        var cancelResult = booking.Cancel();
+        // R8 & R11: Cancel domain logic (already cancelled -> 409, starts < 60 min from now -> 409)
+        var cancelResult = booking.Cancel(timeProvider);
         if (cancelResult.IsFailure)
         {
             return cancelResult;
@@ -27,4 +29,3 @@ public class CancelBookingHandler(
         return Result.Success();
     }
 }
-
